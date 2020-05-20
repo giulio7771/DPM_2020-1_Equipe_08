@@ -1,0 +1,17 @@
+{
+  "name": "A10",
+  "displayName": "A10",
+  "expo": {
+    "name": "A10",
+    "slug": "A10",
+    "version": "1.0.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}

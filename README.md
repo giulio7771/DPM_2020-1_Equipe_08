@@ -11,4 +11,12 @@
 <li> Feito isto,vamos criar um novo aplicativo com expo,digitando: expo init nomeDoSeuApp</li>
 <li>Seu primeiro app com expo ja está pronto para uso!</li>
 
+<h2>Vídeos: </h2>
+<p>a7: https://www.youtube.com/watch?v=hMj1cV2qp6M&feature=youtu.be</p>
+<p>a8: https://www.youtube.com/watch?v=yYSOTc8z45s</p>
+<p>a9: https://www.youtube.com/watch?v=ya18hGZ9iOQ</p>
+<p>a10: https://www.youtube.com/watch?v=LnVySYZQ3Tw&feature=youtu.be</p>
+
+
+
 

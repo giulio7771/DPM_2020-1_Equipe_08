@@ -3,6 +3,10 @@ import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
 
 
 export default class Main extends Component{
+  static navigationOptions = {
+    title: "Gincana Furb"
+  };
+
   state = {
     name: "calouro(a)",
     onChangeText: () => console.log("asd"),

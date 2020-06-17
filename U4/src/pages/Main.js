@@ -20,6 +20,7 @@ export default class Main extends Component{
   }
 
   render() {
+    
     const { name } = this.state;
     return (
       <View style={styles.container}>

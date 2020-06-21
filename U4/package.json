@@ -8,7 +8,9 @@
     "eject": "expo eject"
   },
   "dependencies": {
-    "expo": "~37.0.3",
+    "expo": "^37.0.12",
+    "expo-camera": "~8.2.0",
+    "expo-file-system": "~8.1.0",
     "firebase": "7.9.0",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",

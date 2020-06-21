@@ -1,5 +1,7 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import Constants from 'expo-constants';
+import * as Location from 'expo-location';
 // import { Button } from "react-native-elements";
 
 import MapView from "react-native-maps";
@@ -106,29 +108,95 @@ export default class Adventure extends Component {
     ));
   };
 
+  getIdLocation = async () => {
+    let id = 0;
+
+    deg2Rad = (deg) => {
+      return deg * Math.PI / 180;
+    }
+    
+    pythagorasEquirectangular = (lat1, lon1, lat2, lon2) => {
+      lat1 = deg2Rad(lat1);
+      lat2 = deg2Rad(lat2);
+      lon1 = deg2Rad(lon1);
+      lon2 = deg2Rad(lon2);
+      const R = 6371;
+      const x = (lon2 - lon1) * Math.cos((lat1 + lat2) / 2);
+      const y = (lat2 - lat1);
+      const d = Math.sqrt(x * x + y * y) * R;
+      return d;
+    }
+    nearestPoint = ({latitude, longitude}) => {
+     let mindif = 99999;
+     let closest;
+    
+     for (let index = 0; index < this.state.markers.length; ++index) {
+      const dif = pythagorasEquirectangular(latitude, longitude, this.state.markers[index].latitude, 
+        this.state.markers[index].longitude);
+        console.log(dif);
+        if (dif < mindif) {
+          closest = index;
+          mindif = dif;
+        }
+     }
+     return this.state.markers[closest].id;
+    }
+
+    let { status } = await Location.requestPermissionsAsync();
+    if (status !== 'granted') {
+      return;
+    }
+
+    let location = await Location.getCurrentPositionAsync({});
+
+    this.props.navigation.navigate("Camera", { id: nearestPoint(location.coords) });
+  }
+
   render() {
     const { latitude, longitude, mapType } = this.state;
     return (
-      <View style={styles.view}>
-        <MapView
-          initialRegion={{
-            latitude,
-            longitude,
-            latitudeDelta: 0.0042,
-            longitudeDelta: 0.0031,
+      <View style={{ flex: 1, flexDirection: "column", alignItems: "center" }}>
+        <View
+          style={{
+            width: "100%",
+            height: "90%",
+            backgroundColor: "powderblue",
           }}
-          style={styles.mapView}
         >
-          <MapView.Marker
-            pinColor={"blue"}
-            coordinate={{
+          <MapView
+            initialRegion={{
               latitude,
               longitude,
+              latitudeDelta: 0.0042,
+              longitudeDelta: 0.0031,
             }}
-          ></MapView.Marker>
-          {this.mapMarkers()}
-        </MapView>
+            style={styles.mapView}
+          >
+            <MapView.Marker
+              pinColor={"blue"}
+              coordinate={{
+                latitude,
+                longitude,
+              }}
+            ></MapView.Marker>
+            {this.mapMarkers()}
+          </MapView>
+        </View>
+        <View
+          style={{
+            width: 50,
+            height: "10%",
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+        >
+          <TouchableOpacity
+            style={styles.capture}
+            underlayColor="rgba(255, 255, 100, 0.5)"
+            onPress={() => this.getIdLocation()}
+          ></TouchableOpacity>
       </View>
+        </View>
     );
   }
 }
@@ -142,6 +210,7 @@ const styles = StyleSheet.create({
     right: 0,
   },
   view: {
+    flex: 1,
     position: "absolute",
     top: 0,
     left: 0,
@@ -154,5 +223,12 @@ const styles = StyleSheet.create({
     top: 300,
     left: 0,
     right: 0,
+  },
+  capture: {
+    height: 50,
+    width: 50,
+    borderRadius: 35,
+    borderWidth: 5,
+    color: "#000",
   },
 });

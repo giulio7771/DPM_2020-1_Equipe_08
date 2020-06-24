@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TextInput, Button } from 'react-native';
+import { StyleSheet, Text, View, TextInput,Image, Button } from 'react-native';
 
 
 export default class Main extends Component{
@@ -28,6 +28,8 @@ export default class Main extends Component{
     const { name } = this.state;
     return (
       <View style={styles.container}>
+          <Image style={{width:150,height:150}} source={require('../logo/logotipofurb.jpg')}/>
+
         <Text>Bem vindo a Furb, {name}!</Text>
         <TextInput
           style={styles.input}

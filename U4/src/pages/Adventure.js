@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View,Image, TouchableOpacity } from "react-native";
 import Constants from 'expo-constants';
 import * as Location from 'expo-location';
 // import { Button } from "react-native-elements";
 
-import MapView from "react-native-maps";
+import MapView, { Callout } from "react-native-maps";
 import { Colors } from "react-native/Libraries/NewAppScreen";
 
 //pinColor para mudar a cor do marcador
@@ -15,48 +15,67 @@ export default class Adventure extends Component {
         title: "Praça de atendimento", //-26.906220, -49.078727
         latitude: -26.90622,
         longitude: -49.078727,
+        image:require('../logo/blocoA.png') ,
         id: 1,
       },
       {
         title: "Elevador", //-26.905893, -49.078522
         latitude: -26.905893,
         longitude: -49.078522,
+        image:require('../logo/Bloco_f.png') ,
+
         id: 2,
       },
       {
         title: "Biblioteca", //-26.905087, -49.078362
         latitude: -26.905087,
         longitude: -49.078362,
+        image:require('../logo/biblioteca.jpg') ,
+
+
         id: 3,
       },
       {
         title: "Bloco J", //-26.904424, -49.078070
         latitude: -26.904424,
-        longitude: -49.07807,
+        longitude: -49.07807,      
+          image:require('../logo/bloco j.jpg') ,
+
+
         id: 4,
       },
       {
         title: "Bloco S", //-26.9060154,-49.0796871
         latitude: -26.9060154,
         longitude: -49.0796871,
+        image:require('../logo/bloco s.jpg') ,
+
+
         id: 5,
       },
       {
         title: "DCE", //-26.904734, -49.077544
         latitude: -26.904734,
         longitude: -49.077544,
+        image:require('../logo/dce.jpg') ,
+
         id: 6,
       },
       {
         title: "Campo", //-26.906298, -49.080794
         latitude: -26.906298,
         longitude: -49.080794,
+        image:require('../logo/campo.jpeg') ,
+
         id: 7,
       },
       {
         title: "Ginásio", //-26.906779, -49.081583
         latitude: -26.906779,
         longitude: -49.081583,
+        image:require('../logo/ginasio.jpg') ,
+
+
         id: 8,
       },
     ],
@@ -98,13 +117,16 @@ export default class Adventure extends Component {
 
   mapMarkers = () => {
     return this.state.markers.map((marker) => (
-      <MapView.Marker
+      <MapView.Marker   
         key={marker.id}
         coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
         title={marker.title}
         pinColor={"red"}
         //description={marker.title.comments}
-      ></MapView.Marker>
+      >
+          <Image style={{width:80,height:90}} source={marker.image}/>
+       
+      </MapView.Marker>
     ));
   };
 
@@ -180,6 +202,7 @@ export default class Adventure extends Component {
               }}
             ></MapView.Marker>
             {this.mapMarkers()}
+          
           </MapView>
         </View>
         <View
@@ -202,6 +225,11 @@ export default class Adventure extends Component {
 }
 
 const styles = StyleSheet.create({
+  marcador:{
+    width:80,
+    height:80
+
+  },
   mapView: {
     position: "absolute",
     top: 0,

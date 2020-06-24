@@ -24,11 +24,11 @@ export default class Main extends Component{
   }
 
   render() {
-    
     const { name } = this.state;
+    
     return (
       <View style={styles.container}>
-          <Image style={{width:150,height:150}} source={require('../logo/logotipofurb.jpg')}/>
+        <Image style={{width:150,height:150}} source={require('../logo/logotipofurb.jpg')}/>
 
         <Text>Bem vindo a Furb, {name}!</Text>
         <TextInput

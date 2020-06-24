@@ -122,10 +122,10 @@ export default class Adventure extends Component {
         coordinate={{ latitude: marker.latitude, longitude: marker.longitude }}
         title={marker.title}
         pinColor={"red"}
+        onPress={() => this.props.navigation.navigate('Point', {point: marker})}
         //description={marker.title.comments}
       >
-          <Image style={{width:80,height:90}} source={marker.image}/>
-       
+        <Image style={{width:50,height:50}} source={marker.image}/>
       </MapView.Marker>
     ));
   };
@@ -200,7 +200,7 @@ export default class Adventure extends Component {
                 latitude,
                 longitude,
               }}
-            ></MapView.Marker>
+             ></MapView.Marker>
             {this.mapMarkers()}
           
           </MapView>

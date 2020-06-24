@@ -87,22 +87,21 @@ class CameraRoute extends Component {
     }
   }
 
-  async takePicture() {
+  async takePicture(id) {
     let data = await this.camera.takePictureAsync({ base64: true });
     var storageRef = firebase.storage().ref();
-    console.log(storageRef);
+
     const response = await fetch(data.uri);
-    console.log(data.uri);
+
     const blob = await response.blob();
-    console.log(this.state.id);
     var ref = storageRef
-      .child(this.state.id.toString())
+      .child(id.toString())
       .child(new Date().getTime().toString());
 
     console.log(await ref.put(blob));
     await FileSystem.moveAsync({
       from: data.uri,
-      to: FileSystem.documentDirectory + this.state.id.toString(),
+      to: FileSystem.documentDirectory + id.toString(),
     });
   }
 
@@ -117,7 +116,7 @@ class CameraRoute extends Component {
         <View style={{ flex: 1, position: "absolute", flexDirection: "row" }}>
           <TouchableHighlight
             style={this.state.recording ? styles.recording : styles.capture}
-            onPress={this.takePicture.bind(this)}
+            onPress={this.takePicture(this.state.id)}
             underlayColor="rgba(255, 255, 255, 0.5)"
           >
             <View />

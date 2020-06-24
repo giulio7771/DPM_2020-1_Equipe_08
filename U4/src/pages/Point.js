@@ -1,21 +1,42 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TextInput,Image, Button } from 'react-native';
 import * as Location from 'expo-location';
+import * as firebase from "firebase";
+import "firebase/firestore";
+import "firebase/storage";
 
 export default class Point extends Component {
   state = {
     latitude: -26.905788,
     longitude: -49.079369,
     mapType: null,
-    point: {}
+    point: {},
+    imageUrls: []
   }
+
+  async getImages(id) {
+    var listRef = firebase
+      .storage()
+      .ref()
+      .child(id.toString() + "/");
+    // Find all the prefixes and items.
+    let res = await listRef.listAll();
+    
+    let map = [];
+    for (let index = 0; index < res.items.length; index++) {
+      map.push(await res.items[index].getDownloadURL())
+    }
+    return map;  
+  }
+
 
   componentDidMount() {
     const point = this.props.navigation.getParam('point', {});
     this.setState({
       ...this.state,
-      point
+      point,
     })
+    this.getImages(point.id).then((imageUrls) => this.setState({imageUrls}))
   }
   validaPonto = () => {
     const geoOptions = {
@@ -81,6 +102,7 @@ export default class Point extends Component {
         <Image style={{width:400,height:200}} source={point.image}/>
         <Text>{point.title}</Text>
         <Button onPress={this.validaPonto} title="Validar Ponto" />
+        {this.state.imageUrls.map((url, index) => <Image key={"im"+index} style={{width:400,height:100}} source={{uri: url}}/>)}
       </View>
     );
   }

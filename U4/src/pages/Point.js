@@ -32,9 +32,11 @@ export default class Point extends Component {
 
   componentDidMount() {
     const point = this.props.navigation.getParam('point', {});
+    const user = this.props.navigation.getParam('user', {});
     this.setState({
       ...this.state,
       point,
+      user,
     })
     this.getImages(point.id).then((imageUrls) => this.setState({imageUrls}))
   }
@@ -60,6 +62,13 @@ export default class Point extends Component {
     console.log("validando");
     if (this.isProximo(this.state.point.latitude, latitude)
         && this.isProximo(this.state.point.longitude, longitude)) {
+          console.log(this.state.user.id.toString())
+
+          firebase
+            .firestore()
+            .collection("users")
+            .doc(this.state.user.id).set({pontos: [...this.state.user.pontos, this.state.point.id]}).then(value => console.log(value))
+
           alert("Ponto validado");
     } else {
       alert("Fora de posição");

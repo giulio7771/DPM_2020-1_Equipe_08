@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TextInput,Image, Button } from 'react-native';
+import * as firebase from "firebase";
+import "firebase/firestore";
+import "firebase/storage";
 
 
 export default class Main extends Component{
@@ -19,8 +22,13 @@ export default class Main extends Component{
     });
   }
 
-  buttonPress = () => {
-    this.props.navigation.navigate('Adventure');
+   buttonPress = async () => {
+    const user = firebase.firestore().collection("users").doc();
+    await user.set({
+      name: this.state.name,
+      pontos: [],
+    });
+    this.props.navigation.navigate('Adventure', {user_id: user.id});
   }
 
   render() {

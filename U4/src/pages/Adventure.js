@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, Image, TouchableOpacity, Alert } from "react-native";
 import Constants from "expo-constants";
 import * as Location from "expo-location";
 // import { Button } from "react-native-elements";
@@ -140,6 +140,16 @@ export default class Adventure extends Component {
   }
 
   mapMarkers = () => {
+    if (this.state.user?.pontos?.length === this.state.markers.length) {
+      Alert.alert(
+        "Concluído",
+        "Você concluiu a gincana, parabéns",
+        [
+          { text: "OK", onPress: () => {} }
+        ],
+        { cancelable: false }
+      );
+    }
     return this.state.markers.map((marker) => (
       <MapView.Marker
         key={marker.id}
@@ -152,7 +162,7 @@ export default class Adventure extends Component {
         //description={marker.title.comments}
       >
         {this.state.user?.pontos.includes(marker.id) ? (
-          <Image style={{ width: 0, height: 0 }} source={marker.image} />
+          <View style={{ width: 50, height: 50, backgroundColor: 'green' }}  />
         ) : (
           <Image style={{ width: 50, height: 50 }} source={marker.image} />
         )}

@@ -236,7 +236,7 @@ export default class Adventure extends Component {
         <View
           style={{
             width: "100%",
-            height: "90%",
+            height: "100%",
             backgroundColor: "powderblue",
           }}
         >
@@ -258,20 +258,6 @@ export default class Adventure extends Component {
             ></MapView.Marker>
             {this.mapMarkers()}
           </MapView>
-        </View>
-        <View
-          style={{
-            width: 50,
-            height: "10%",
-            flexDirection: "row",
-            alignItems: "center",
-          }}
-        >
-          <TouchableOpacity
-            style={styles.capture}
-            underlayColor="rgba(255, 255, 100, 0.5)"
-            onPress={() => this.getIdLocation()}
-          ></TouchableOpacity>
         </View>
       </View>
     );

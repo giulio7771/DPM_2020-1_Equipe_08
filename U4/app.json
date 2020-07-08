@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Machado",
-    "slug": "Machado",
+    "name": "FurbGo",
+    "slug": "furb-go",
     "platforms": [
       "ios",
       "android",
@@ -22,7 +22,18 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.furbgo.furbgo",
+      "buildNumber": "1.0.0"
+    },
+    "android": {
+      "package": "com.furbgo.furbgo",
+      "versionCode": 1,
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyBgJ914ppSMjwte08LKU_HW8ycS-B4zwoE"
+        }
+      }
     }
   }
 }

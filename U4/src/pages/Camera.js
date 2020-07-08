@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Alert } from "react";
 import {
   View,
   StyleSheet,
@@ -13,6 +13,7 @@ import * as FileSystem from "expo-file-system";
 import * as firebase from "firebase";
 import "firebase/firestore";
 import "firebase/storage";
+import * as Permissions from "expo-permissions";
 
 const styles = StyleSheet.create({
   container: {
@@ -80,6 +81,7 @@ class CameraRoute extends Component {
       path: null,
       recording: false,
       record: false,
+      hasPermission: null,
     };
 
     if (!this.state.id) {
@@ -87,43 +89,61 @@ class CameraRoute extends Component {
     }
   }
 
+  async componentDidMount() {
+    const { status } = await Permissions.askAsync(Permissions.CAMERA);
+    this.setState({ hasPermission: status === "granted" });
+  }
+
   async takePicture(id) {
-    let data = await this.camera.takePictureAsync({ base64: true });
-    var storageRef = firebase.storage().ref();
+    try {
+      let data = await this.camera.takePictureAsync({ base64: true });
+      var storageRef = firebase.storage().ref();
 
-    const response = await fetch(data.uri);
+      const response = await fetch(data.uri);
 
-    const blob = await response.blob();
-    var ref = storageRef
-      .child(id.toString())
-      .child(new Date().getTime().toString());
+      const blob = await response.blob();
+      var ref = storageRef
+        .child(id.toString())
+        .child(new Date().getTime().toString());
 
-    console.log(await ref.put(blob));
-    await FileSystem.moveAsync({
-      from: data.uri,
-      to: FileSystem.documentDirectory + id.toString(),
-    });
+      console.log(await ref.put(blob));
+      await FileSystem.moveAsync({
+        from: data.uri,
+        to: FileSystem.documentDirectory + id.toString(),
+      });
+    } catch (error) {
+      Alert.alert("Error", error, [{ text: "OK", onPress: () => {} }], {
+        cancelable: false,
+      });
+    }
   }
 
   renderCamera() {
-    return (
-      <Camera
-        ref={(cam) => {
-          this.camera = cam;
-        }}
-        style={styles.preview}
-      >
-        <View style={{ flex: 1, position: "absolute", flexDirection: "row" }}>
-          <TouchableHighlight
-            style={this.state.recording ? styles.recording : styles.capture}
-            onPress={this.takePicture(this.state.id)}
-            underlayColor="rgba(255, 255, 255, 0.5)"
-          >
-            <View />
-          </TouchableHighlight>
-        </View>
-      </Camera>
-    );
+    const { hasPermission } = this.state;
+    if (hasPermission === null) {
+      return <View />;
+    } else if (hasPermission === false) {
+      return <Text>No access to camera</Text>;
+    } else {
+      return (
+        <Camera
+          ref={(cam) => {
+            this.camera = cam;
+          }}
+          style={styles.preview}
+        >
+          <View style={{ flex: 1, position: "absolute", flexDirection: "row" }}>
+            <TouchableHighlight
+              style={this.state.recording ? styles.recording : styles.capture}
+              onPress={() => this.takePicture(this.state.id).then(() => this.props.navigation.goBack(null))}
+              underlayColor="rgba(255, 255, 255, 0.5)"
+            >
+              <View />
+            </TouchableHighlight>
+          </View>
+        </Camera>
+      );
+    }
   }
 
   renderImage() {

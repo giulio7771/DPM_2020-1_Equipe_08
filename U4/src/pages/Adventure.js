@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, Image, TouchableOpacity, Alert } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
 import Constants from "expo-constants";
 import * as Location from "expo-location";
 // import { Button } from "react-native-elements";
@@ -9,6 +16,7 @@ import { Colors } from "react-native/Libraries/NewAppScreen";
 import * as firebase from "firebase";
 import "firebase/firestore";
 import "firebase/storage";
+import { Camera } from "expo-camera";
 
 //pinColor para mudar a cor do marcador
 export default class Adventure extends Component {
@@ -144,9 +152,7 @@ export default class Adventure extends Component {
       Alert.alert(
         "Concluído",
         "Você concluiu a gincana, parabéns",
-        [
-          { text: "OK", onPress: () => {} }
-        ],
+        [{ text: "OK", onPress: () => {} }],
         { cancelable: false }
       );
     }
@@ -157,12 +163,15 @@ export default class Adventure extends Component {
         title={marker.title}
         pinColor={"red"}
         onPress={() =>
-          this.props.navigation.navigate("Point", { point: marker, user: this.state.user})
+          this.props.navigation.navigate("Point", {
+            point: marker,
+            user: this.state.user,
+          })
         }
         //description={marker.title.comments}
       >
         {this.state.user?.pontos.includes(marker.id) ? (
-          <View style={{ width: 50, height: 50, backgroundColor: 'green' }}  />
+          <View style={{ width: 50, height: 50, backgroundColor: "green" }} />
         ) : (
           <Image style={{ width: 50, height: 50 }} source={marker.image} />
         )}
@@ -214,7 +223,7 @@ export default class Adventure extends Component {
     }
 
     let location = await Location.getCurrentPositionAsync({});
-
+ 
     this.props.navigation.navigate("Camera", {
       id: nearestPoint(location.coords),
     });

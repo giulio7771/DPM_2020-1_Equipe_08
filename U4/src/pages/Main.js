@@ -22,12 +22,12 @@ export default class Main extends Component{
     });
   }
 
-   buttonPress = async () => {
+   buttonPress() {
     const user = firebase.firestore().collection("users").doc();
-    await user.set({
+    user.set({
       name: this.state.name,
       pontos: [],
-    });
+    }).then(console.log);
     this.props.navigation.navigate('Adventure', {user_id: user.id});
   }
 
@@ -44,7 +44,7 @@ export default class Main extends Component{
           placeholder="Nome/apelido"
           onChangeText={(val) => this.setName(val)}
         />
-        <Button style={styles.button} title="Go" onPress={this.buttonPress} />
+        <Button style={styles.button} title="Go" onPress={() => this.buttonPress()} />
       </View>
     );
   }
